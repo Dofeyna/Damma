@@ -24,7 +24,7 @@ public class ParseApplication extends Application {
 		defaultACL.setPublicReadAccess(true);
 		
 		ParseACL.setDefaultACL(defaultACL, true);
-		//aminizakorum
+		
 	}
 
 }
