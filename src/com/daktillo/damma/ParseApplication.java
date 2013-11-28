@@ -23,9 +23,9 @@ public class ParseApplication extends Application {
 		// If you would like all objects to be private by default, remove this line.
 		defaultACL.setPublicReadAccess(true);
 		
-		int a = 5;
-		
 		ParseACL.setDefaultACL(defaultACL, true);
+	
+		String a = "deneme";
 	}
 
 }
