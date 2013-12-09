@@ -1,4 +1,4 @@
-package com.daktillo.damma;
+package com.parse.starter;
 
 import com.parse.Parse;
 import com.parse.ParseACL;
@@ -14,7 +14,7 @@ public class ParseApplication extends Application {
 		super.onCreate();
 
 		// Add your initialization code here
-		Parse.initialize(this, "8mwgMTwEb5XKuNWRrPUJJzhYPnDHaEAnxttv2Joh", "iw7tq46bcZA3A0Fdo6o7TSaJvEPEyV245sEukcVz"); 
+		Parse.initialize(this, "xIHbB3FI2xQJyWkVdVY7hsQwdgZ82tVNJcn88ONj", "gV82bAOfVB9spZ3xJmpmxaeFnJSPQ4c748SPtHJn"); 
 
 
 		ParseUser.enableAutomaticUser();
@@ -24,8 +24,6 @@ public class ParseApplication extends Application {
 		defaultACL.setPublicReadAccess(true);
 		
 		ParseACL.setDefaultACL(defaultACL, true);
-	
-		String a = "deneme";
 	}
 
 }

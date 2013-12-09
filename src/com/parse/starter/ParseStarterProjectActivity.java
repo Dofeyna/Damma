@@ -1,10 +1,9 @@
-package com.daktillo.damma;
+package com.parse.starter;
 
 import android.app.Activity;
 import android.os.Bundle;
 
 import com.parse.ParseAnalytics;
-import com.parse.starter.R;
 
 public class ParseStarterProjectActivity extends Activity {
 	/** Called when the activity is first created. */
@@ -13,5 +12,8 @@ public class ParseStarterProjectActivity extends Activity {
 		setContentView(R.layout.main);
 
 		ParseAnalytics.trackAppOpened(getIntent());
+		
+		Game game = new Game();
+		game.initialize();
 	}
 }
