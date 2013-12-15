@@ -1,12 +1,8 @@
 package com.parse.starter;
 
 import java.util.HashMap;
-
 import org.json.JSONArray;
-
 import android.util.Log;
-
-import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
@@ -18,13 +14,13 @@ public class Game {
 
 	/*
 	 * for pieces array : 0 = empty
-	 * 					  -1 = white 
-	 * 					  -2 = white dama 
+	 * 					  -1 = red 
+	 * 					  -2 = red dama 
 	 * 					  1 = black 
 	 * 					  2 = black dama
 	 */
 
-	int gameId;
+	int gameId = -1;
 	int[][] pieces;
 	JSONArray board;
 	boolean[][] highlights;
@@ -32,6 +28,7 @@ public class Game {
 	int color;
 
 	public boolean initialize() {
+		color = 1;
 		// Receive the gameId from the Parse
 		receiveGameId();
 		
@@ -45,15 +42,15 @@ public class Game {
 		cleanBoard();
 
 		// initialize white pieces
-		for (int y = 1; y < 3; y++) {
-			for (int x = 0; x < 8; x++) {
-				pieces[x][x] = -1;
+		for (int x = 1; x < 3; x++) {
+			for (int y = 0; y < 8; y++) {
+				pieces[x][y] = -1;
 			}
 		}
 
 		// initialize black pieces
-		for (int y = 5; y < 7; y++) {
-			for (int x = 0; x < 8; x++) {
+		for (int x = 5; x < 7; x++) {
+			for (int y = 0; y < 8; y++) {
 				pieces[x][y] = 1;
 			}
 		}
@@ -202,10 +199,11 @@ public class Game {
 			}
 		}
 		
-		ParseObject gameScore = new ParseObject("GameBoards");
-		gameScore.put("gameId", gameId);
-		gameScore.put("board", board);		
-		gameScore.saveInBackground();
+		ParseObject object = new ParseObject("GameBoards");
+		object.put("gameId", gameId);
+		object.put("board", board);	
+		object.put("situation", 0);
+		object.saveInBackground();
 	}
 	
 	public void updateBoardInParse(){
@@ -213,6 +211,7 @@ public class Game {
 		for( int i = 0; i < 8; i++ ){
 			for( int j = 0; j < 8; j++){
 				board.put(pieces[i][j]);
+
 			}
 		}
 		
@@ -224,31 +223,62 @@ public class Game {
 			public void done(ParseObject object, ParseException e) {
 				// TODO Auto-generated method stub
 				object.put("board", board);
+				object.saveInBackground();
 			}
 		});
 	}
 	
-	public void receiveGameId(){
-		ParseCloud.callFunctionInBackground("receiveGameId",  new HashMap<String, Object>(), new FunctionCallback<String>() {
-			  public void done(String result, ParseException e) {
-				    if (e == null) {
-				    	Log.d("result = ", result);
-				    }
-				  }
-		});
+	public void receiveGameId(){		
+		try {
+			gameId = ParseCloud.callFunction("receiveGameId", new HashMap<String, Integer>());
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("GameId");
-		query.getFirstInBackground(new GetCallback<ParseObject>(){
-
-			@Override
-			public void done(ParseObject object, ParseException e) {
-				// TODO Auto-generated method stub
-				object.increment("lastGameId");
-				object.saveInBackground();
-			}
-			
-		});
+		Log.d("GAMEID: ", "" + gameId);
+	}
+	
+	public void joinGame( int gameId){
+		this.gameId = gameId;
+		color = -1;
 		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("GameBoards");
+		query.whereEqualTo("gameId", gameId);
+		try {
+			ParseObject object = query.getFirst();
+			object.put("situation",1);
+			object.save();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public int checkSituation(){
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("GameBoards");
+		query.whereEqualTo("gameId", gameId);
+		try {
+			ParseObject object = query.getFirst();
+			return object.getInt("situation");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return 3;
+	}
+	
+	public void deleteGame(){
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("GameBoards");
+		query.whereEqualTo("gameId", gameId);
+		try {
+			ParseObject object = query.getFirst();
+			object.delete();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
