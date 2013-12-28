@@ -2,25 +2,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@color/Ivory" >
+    android:background="@drawable/background"
+    android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/deneme"
+        android:id="@+id/tvCheckers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="45dp"
+        android:text="CHECKERS"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:textColor="@color/Yellow" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:src="@drawable/checkers" />
+
+    <Button
+        android:id="@+id/buttonCG"
+        style="@style/ButtonText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="hello" />
-    
-    <Button 
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn_yellow"
+        android:text="Continue Game" />
+
+    <Button
         android:id="@+id/buttonMP"
+        style="@style/ButtonText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/btn_yellow"
         android:text="Multi Player" />
-    
-    <Button 
+
+    <Button
         android:id="@+id/buttonSP"
+        style="@style/ButtonText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Single Player" />"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/btn_yellow"
+        android:text="Single Player" />
 
 </LinearLayout>

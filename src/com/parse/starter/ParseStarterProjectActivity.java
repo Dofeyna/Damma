@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
@@ -16,12 +18,11 @@ import com.parse.ParseAnalytics;
 public class ParseStarterProjectActivity extends Activity implements OnClickListener {
 	/** Called when the activity is first created. */
 	
-	Game game;
 	MultiPlayer mp;
 	ProgressDialog progress;
 	Handler handlerUI;
-	Button buttonMP;
-	Button buttonSP;
+	Button buttonMP,buttonSP,buttonCG;
+	TextView checkers;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,13 +32,22 @@ public class ParseStarterProjectActivity extends Activity implements OnClickList
 		
 		handlerUI = new Handler();
 		
+		Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Android.ttf");
+		checkers = (TextView)findViewById(R.id.tvCheckers);
+		checkers.setTypeface(tf);
+		
 		buttonMP = (Button)findViewById(R.id.buttonMP);
 		buttonMP.setOnClickListener(this);
 		
 		buttonSP = (Button)findViewById(R.id.buttonSP);
 		buttonSP.setOnClickListener(this);
 		
-		game = new Game();		
+		buttonCG = (Button)findViewById(R.id.buttonCG);
+		buttonCG.setOnClickListener(this);
+		buttonCG.setClickable(false);
+		
+		ParseApplication.game = new Game();	
+		ParseApplication.game.initialize();
 		mp = new MultiPlayer();
 		
 	}
@@ -54,26 +64,29 @@ public class ParseStarterProjectActivity extends Activity implements OnClickList
 				progress.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {
-				    	game.deleteGame();
+				    	progress.setMessage("Cancelling...");
+				    	ParseApplication.game.deleteGame();
 				        dialog.dismiss();
 				    }
 				});
 				progress.show();
-				game.initialize();
+				ParseApplication.game.newGame();
 				
 				handlerUI.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                    	int situation = game.checkSituation();
+                    	int situation = ParseApplication.game.checkSituation();
                     	
                     	if(situation == 0){
-                    		game.deleteGame();
+                    		ParseApplication.game.deleteGame();
         					progress.dismiss();
         					Toast.makeText(getApplicationContext(), "Couldn't Find :(((",
         							   Toast.LENGTH_SHORT).show();
         				}
         				else if(situation == 1){
-        					
+        					buttonCG.setClickable(true);
+        					Intent myIntent = new Intent( ParseStarterProjectActivity.this, GameActivity.class);
+        		            startActivityForResult(myIntent, 0);
         				}
         				else{
         					//The Game is finished
@@ -85,10 +98,17 @@ public class ParseStarterProjectActivity extends Activity implements OnClickList
 				
 			}
 			else{
-				game.joinGame(response);
+				ParseApplication.game.joinGame(response);
+				Intent myIntent = new Intent( ParseStarterProjectActivity.this, GameActivity.class);
+	            startActivityForResult(myIntent, 0);
 			}
 		}
 		else if( v.getId() == R.id.buttonSP ){
+			ParseApplication.game.joinGame(2);
+			Intent myIntent = new Intent(v.getContext(), GameActivity.class);
+            startActivityForResult(myIntent, 0);
+		}
+		else if( v.getId() == R.id.buttonCG ){
 			Intent myIntent = new Intent(v.getContext(), GameActivity.class);
             startActivityForResult(myIntent, 0);
 		}

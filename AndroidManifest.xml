@@ -4,17 +4,20 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="15"/>
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="15"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name="ParseApplication"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
+        android:label="Damma"
+        android:theme="@android:style/Theme.Black.NoTitleBar" >"
         <activity
-            android:name="com.parse.starter.ParseStarterProjectActivity"
+            android:name="com.parse.starter.WelcomeActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,9 +25,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+       
         <activity
             android:name = ".GameActivity" >
-            </activity>
+        </activity>
+        
+        <activity
+            android:name = ".ParseStarterProjectActivity" >
+        </activity>
+        
+        <activity
+            android:name = ".LoginActivity" >
+        </activity>
+        
+        <activity
+            android:name = ".SignUpActivity" >
+        </activity>
+        
+        <service android:name="com.parse.PushService" />
+		<receiver android:name="com.parse.ParseBroadcastReceiver">
+		  <intent-filter>
+		    <action android:name="android.intent.action.BOOT_COMPLETED" />
+		    <action android:name="android.intent.action.USER_PRESENT" />
+		  </intent-filter>
+		</receiver>
+        
     </application>
 
 </manifest>
