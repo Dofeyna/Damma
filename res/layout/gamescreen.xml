@@ -3,13 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/Ivory" >
+    android:background="@drawable/background" >
     
     <Button
         android:id="@+id/refresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Refresh" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right"
+        android:background="@drawable/refresh" />
     
     <TextView 
         android:id="@+id/tvTurn"
@@ -33,10 +34,11 @@
 	    android:background="@drawable/board"
 	    android:rowCount="8"
 	    android:columnCount="8"
+	    android:layout_gravity="center_horizontal"
 	    >
 	    
         <ImageView 
-            android:visibility="visible"
+            android:visibility="invisible"
             android:id="@+id/P7x0"
        	 	android:layout_width="37dp"
         	android:layout_height="37dp"
@@ -46,7 +48,7 @@
         	android:clickable="true" />
         
         <ImageView
-            android:visibility="visible" 
+            android:visibility="invisible" 
             android:id="@+id/P7x1"
        	 	android:layout_width="37dp"
         	android:layout_height="37dp"

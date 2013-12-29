@@ -167,8 +167,9 @@ public final class R {
         public static final int opalred=0x7f02000b;
         public static final int red=0x7f02000c;
         public static final int red2=0x7f02000d;
-        public static final int trans_black=0x7f02000e;
-        public static final int trans_red=0x7f02000f;
+        public static final int refresh=0x7f02000e;
+        public static final int trans_black=0x7f02000f;
+        public static final int trans_red=0x7f020010;
     }
     public static final class id {
         public static final int P0x0=0x7f07003b;

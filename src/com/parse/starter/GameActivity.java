@@ -2,11 +2,11 @@ package com.parse.starter;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class GameActivity extends Activity implements OnClickListener {
 
@@ -16,6 +16,7 @@ public class GameActivity extends Activity implements OnClickListener {
 	ImageView v;
 	boolean clicked = false;
 	Button refresh;
+	TextView tvTurn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +28,19 @@ public class GameActivity extends Activity implements OnClickListener {
 		highlights = new boolean[8][8];
 		views = new ImageView[8][8];
 		
-		refresh = (Button)findViewById(R.id.refresh);
+		ParseApplication.game.updateBoardFromParse();
+
+		tvTurn = (TextView) findViewById(R.id.tvTurn);
+
+		refresh = (Button) findViewById(R.id.refresh);
 		refresh.setOnClickListener(this);
-		
-		if( ParseApplication.game.turn == ParseApplication.game.color ){
+
+		if (ParseApplication.game.turn == ParseApplication.game.color) {
 			refresh.setEnabled(false);
-		}
-		else{
+			tvTurn.setText("Your Turn!");
+		} else {
 			refresh.setEnabled(true);
+			tvTurn.setText("Waiting for Opponent!");
 		}
 
 		for (int x = 0; x < 8; x++) {
@@ -49,7 +55,6 @@ public class GameActivity extends Activity implements OnClickListener {
 		}
 
 		updateBoard();
-
 	}
 
 	public void updateBoard() {
@@ -102,39 +107,38 @@ public class GameActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		
-		if( v.getId() == R.id.refresh ){
-			if( ParseApplication.game.updateWhenTurn() == true){
+
+		if (v.getId() == R.id.refresh) {
+			if (ParseApplication.game.updateWhenTurn() == true) {
 				refresh.setEnabled(false);
+				tvTurn.setText("Your Turn!");
 				updateBoard();
 			}
-		}
-		else{
-			Log.d("turn", "girdi");
+		} else {
 			if (ParseApplication.game.turn == ParseApplication.game.color) {
-				Log.d("turn2", "girdi2");
-	
+
 				String coor = getResources().getResourceName(v.getId());
-	
+
 				char xx = coor.charAt(22);
 				char yy = coor.charAt(24);
-	
+
 				int x = Character.getNumericValue(xx);
 				int y = Character.getNumericValue(yy);
-	
+
 				if (clicked == false) {
 					cleanHighlight();
 					if (ParseApplication.game.checkPath(x, y) == true) {
 						clicked = true;
 					}
 				} else {
-	
+
 					if (highlights[x][y] == true) {
-						Log.d("turn3", "girdi3");
 						ParseApplication.game.makeMove(x, y);
 						cleanHighlight();
 						clicked = false;
 						refresh.setEnabled(true);
+						tvTurn.setText("Waiting for Opponent!");
+						ParseApplication.game.warnOpponent();
 					} else {
 						cleanHighlight();
 						if (ParseApplication.game.checkPath(x, y) == true) {
@@ -142,7 +146,7 @@ public class GameActivity extends Activity implements OnClickListener {
 						}
 					}
 				}
-	
+
 				updateBoard();
 				updateHighlights();
 			}

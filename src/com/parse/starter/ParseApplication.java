@@ -26,7 +26,7 @@ public class ParseApplication extends Application {
 		
 		ParseACL.setDefaultACL(defaultACL, true);
 		
-		PushService.setDefaultPushCallback(this, GameActivity.class);
+		PushService.setDefaultPushCallback(this, ParseStarterProjectActivity.class);
 		try {
 			ParseInstallation.getCurrentInstallation().save();
 		} catch (ParseException e) {

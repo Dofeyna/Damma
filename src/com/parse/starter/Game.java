@@ -1,6 +1,7 @@
 package com.parse.starter;
 
 import java.util.HashMap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -59,7 +60,7 @@ public class Game {
 
 		// UPDATE PARSE DATABASE
 		createBoardInParse();
-
+		
 	}
 
 	public boolean checkPath(int x, int y) {
@@ -180,7 +181,6 @@ public class Game {
 
 		// Update the pieces array
 		updateBoardInParse();
-		updateTurnInParse();
 
 		return true;
 	}
@@ -254,6 +254,7 @@ public class Game {
 		try {
 			ParseObject object = query.getFirst();
 			object.put("board", board);
+			object.put("turn", turn);
 			object.save();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -270,7 +271,7 @@ public class Game {
 
 		try {
 			ParseObject object = query.getFirst();
-
+			turn = object.getInt("turn");
 			board = object.getJSONArray("board");
 
 			for (int i = 0; i < 8; i++) {
@@ -345,20 +346,6 @@ public class Game {
 			e.printStackTrace();
 		}
 	}
-
-	public void updateTurnInParse(){
-		
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("GameBoards");
-		query.whereEqualTo("gameId", gameId);
-		try {
-			ParseObject object = query.getFirst();
-			object.put("turn", turn);
-			object.save();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	
 	public boolean updateWhenTurn(){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("GameBoards");
@@ -376,6 +363,22 @@ public class Game {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public void warnOpponent(){
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		if( color == -1 ){
+			params.put("channel", "game" + gameId + "b");
+		}else{
+			params.put("channel", "game" + gameId + "r");
+		}
+		
+		try {
+			ParseCloud.callFunction("warnOpponent", params);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

@@ -45,6 +45,8 @@ public class SignUpActivity extends Activity implements OnClickListener{
 			user.setUsername(uName);
 			user.setEmail(uName);
 			user.setPassword(pass);
+			user.put("curGameId", -1);
+			user.put("curColor", 0);
 			try {
 				user.signUp();
 				ParseUser.logIn(uName, pass);
